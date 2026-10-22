@@ -22,5 +22,17 @@ uv run pytest                    # run the tests
 - Run ruff, mypy, and pytest after every change and
   include their output. Never report done while one
   fails.
-- Never weaken a check: no raised max-complexity, no
-  # noqa or # type: ignore, no skipped tests.
+- Never weaken a check: no raised max-complexity, 
+no # noqa or # type: ignore, no skipped tests.
+
+## Changes
+- Never commit to main. Make each change on its own
+  branch and open a pull request with gh pr create.
+  The description has a ## Summary (what changed and
+  why, citing docs/proposal.md) and a ## Test plan
+  checklist (checked items were run; unchecked items
+  are left for the reviewer).
+- After pushing, run gh pr checks --watch and report
+  the result.
+-  Never merge a pull request. The person merges
+  after reviewing it.
