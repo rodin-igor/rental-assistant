@@ -64,7 +64,7 @@ The main limitation is that the dataset does not include property links or photo
 
 ## LLM role
 
-The model's job is to translate a message into a small set of search fields and identify what is unclear. The application will validate those fields and retrieve the listings.
+The model's job is to translate a message into a small set of search fields and identify what is unclear. It will receive the conversation history and current applied filters to understand follow-ups. New or changed requirements update the relevant filters, while requirements not changed by the message are preserved. Initial testing will use `gpt-oss-120b` through the [course LLM gateway](https://128.171.10.83:9443/llms.txt), using its OpenAI-compatible base URL `https://128.171.10.83:9443/v1` and Chat Completions endpoint. The application will send the conversation history on each request because the gateway does not remember prior turns. The application will validate those fields and retrieve the listings.
 
 ## Data use
 
@@ -80,7 +80,7 @@ For the first version, I will use keyword search to find relevant information in
 
 ## Human review
 
-Users will review the model's interpretation through visible extracted filters.  Searches can run automatically when the request is clear. Ambiguous users' requirements will need clarifications.
+Users will review the model's interpretation through visible extracted filters. Direct filter edits take effect when the user clicks Apply filters; this uses the edited values without calling the model and discards any unsent chat message. Sending a chat message ignores unapplied manual filter edits and automatically applies relevant model-extracted changes using the conversation history and current applied filters. Messages with no relevant changes leave the filters unchanged. Searches can run automatically when the request is clear. Ambiguous users' requirements will need clarifications.
 
 ## One failure case
 
@@ -104,7 +104,7 @@ If a request has no usable location, the app will pause the new search and ask f
 
 ## Open questions
 
-Decisions I need to make include which model to use and whether one model is enough for all tasks or different models would work better for specific tasks. I also need to decide whether the interface needs changes.
+Initial testing will use `gpt-oss-120b`. It remains to be determined whether one model is enough for all tasks or different models would work better for specific tasks. I also need to decide whether the interface needs changes.
 
 The main uncertainties are:
 
