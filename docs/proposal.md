@@ -38,7 +38,7 @@ The user should see a list of properties that meet the search criteria. The orig
 
 - Results: cards show the info about property
 
-- Liked: returns selected listings during the current page session.
+- Liked: returns selected listings saved in persistent storage.
 
 ![Big-picture sketch](proposal_assets/image1.jpg)
 
@@ -72,7 +72,7 @@ The LLM will extract the user's requirements, such as location, budget, bedrooms
 
 ## Saved records
 
-Version one will have no accounts and no persistent storage for a user's search history or liked listings. The browser will keep the current conversation, filters, results, and liked listing IDs in memory while the page stays open.
+Version one will use SQLite through Python's built-in `sqlite3` module for persistent storage of conversations, search history, filters, results, and liked listing IDs. Saved data will remain available after the page is closed or reloaded. There will be no accounts, login, or authentication.
 
 ## Searchable text
 
@@ -96,9 +96,7 @@ If a request has no usable location, the app will pause the new search and ask f
 
 ## Outside version one
 
-- Authentication
-
-- Persistent storage for results
+- Accounts, login, and authentication
 
 - A mobile app
 
