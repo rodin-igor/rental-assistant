@@ -1,9 +1,22 @@
 """Routes and a minimal page for the rental assistant prototype."""
 
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from typing import Annotated
 
-from app.agent import Listing, SearchFilters, SearchRequest, SearchResponse
+from dotenv import load_dotenv
+from fastapi import Depends, FastAPI, Request
+from fastapi.responses import HTMLResponse, JSONResponse
+from pydantic_ai.models import Model
+
+from app.agent import (
+    AgentUnavailableError,
+    ApplyRequest,
+    SearchRequest,
+    SearchResponse,
+    model_dependency,
+)
+from app.service import apply_filters, interpret_search
+
+load_dotenv()
 
 app = FastAPI(title="Rental Assistant")
 
@@ -159,31 +172,20 @@ def home() -> str:
 
 
 @app.post("/search", response_model=SearchResponse)
-def search(request: SearchRequest) -> SearchResponse:
-    """Return fixed demonstration data without interpreting the request."""
-    return SearchResponse(
-        message="Placeholder only: these sample filters and listing are fixed. "
-        "Your request has not been interpreted or searched.",
-        filters=SearchFilters(
-            city="Honolulu",
-            state="HI",
-            bedrooms=2,
-            max_monthly_rent=2500,
-            dogs_allowed=True,
-            amenities=["parking"],
-        ),
-        listings=[
-            Listing(
-                id="sample-1",
-                title="Sample apartment (placeholder)",
-                description="Fictional two-bedroom apartment with parking. "
-                "Dogs allowed. This is not a real rental listing.",
-                city="Honolulu",
-                state="HI",
-                monthly_rent=2400,
-                bedrooms=2,
-                dogs_allowed=True,
-                amenities=["parking"],
-            )
-        ],
-    )
+async def search(
+    request: SearchRequest, model: Annotated[Model, Depends(model_dependency)]
+) -> SearchResponse:
+    """Interpret a new message using the supplied history and current state."""
+    return await interpret_search(request, model)
+
+
+@app.post("/filters/apply", response_model=SearchResponse)
+def apply(request: ApplyRequest) -> SearchResponse:
+    """Accept direct edits without model access."""
+    return apply_filters(request)
+
+
+@app.exception_handler(AgentUnavailableError)
+async def agent_error(request: Request, error: AgentUnavailableError) -> JSONResponse:
+    """Return only application-authored errors, never raw provider details."""
+    return JSONResponse(status_code=503, content={"detail": str(error)})
