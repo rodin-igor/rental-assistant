@@ -162,7 +162,14 @@ def get_model() -> OpenAIChatModel:
     gateway = os.getenv("LLM_API_GATEWAY", "").strip()
     token = os.getenv("LLM_API_TOKEN", "").strip()
     model_name = os.getenv("LLM_MODEL", "gpt-oss-120b").strip()
-    address = urlsplit(gateway)
+    try:
+        address = urlsplit(gateway)
+        # Accessing this property validates mistyped port numbers as well.
+        _ = address.port
+    except ValueError:
+        raise AgentUnavailableError(
+            "Chat is not configured. Check the server LLM settings."
+        ) from None
     if not token or not model_name or address.scheme not in {"http", "https"}:
         raise AgentUnavailableError("Chat is not configured. Check the server LLM settings.")
     if not address.netloc:

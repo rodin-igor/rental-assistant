@@ -47,11 +47,11 @@
 - `rental_agent` is `Agent[None, FilterInterpretation]`; `interpret(request: SearchRequest, model: Model) -> FilterInterpretation` passes typed history and explicitly labeled current state.
 - `get_model() -> Model` creates an OpenAIChatModel lazily; `AgentUnavailableError` exposes safe configuration errors.
 
-- [ ] Write `tests/test_agent.py`: inspect real captured agent messages under TestModel for past user/assistant text, applied snapshots, current state and draft. Verify null versus omission, rejected system roles and blank messages, configuration base URL/model and disabled SDK retries.
-- [ ] Run `uv run pytest tests/test_agent.py -q` and observe the missing-contract failure; also run Ruff and mypy.
-- [ ] Implement the models, lazy gateway client with SDK retries disabled, non-strict output-tool schema, instructions, and history translation. No provider is constructed at import time.
-- [ ] Run the full checks and confirm green, retaining the placeholder route for this task.
-- [ ] Commit the agent contract and tests.
+- [x] Write `tests/test_agent.py`: inspect real captured agent messages under TestModel for past user/assistant text, applied snapshots, current state and draft. Verify null versus omission, rejected system roles and blank messages, configuration base URL/model and disabled SDK retries.
+- [x] Run `uv run pytest tests/test_agent.py -q` and observe the missing-contract failure; also run Ruff and mypy.
+- [x] Implement the models, lazy gateway client with SDK retries disabled, non-strict output-tool schema, instructions, and history translation. No provider is constructed at import time.
+- [x] Run the full checks and confirm green, retaining the placeholder route for this task.
+- [x] Commit the agent contract and tests.
 
 ### Task 2: Service, rules, and endpoint behavior
 
@@ -63,11 +63,11 @@
 - Responses retain exactly `message`, `filters`, `listings`, `clarification_question`. Listings are empty. A non-null question marks the returned filters as a draft.
 - FastAPI uses `Depends(get_model)` for `/search` only and maps `AgentUnavailableError` to a safe 503 response.
 
-- [ ] Write rule/service/endpoint tests for partial budget updates, explicit removal, draft clarification, unrelated changes, complete/incomplete Apply with zero model access, history inclusion, blank request validation and safe model failure.
-- [ ] Preserve both skeleton checks; inject TestModel instead of allowing the new live endpoint to initialize a gateway client.
-- [ ] Run the full checks; observe the expected endpoint/rule failures.
-- [ ] Implement plain merge/location rules, orchestration, both typed endpoints and safe configuration/upstream errors. Preserve optional budget and existing filter fields.
-- [ ] Run all checks, confirm green, and commit.
+- [x] Write rule/service/endpoint tests for partial budget updates, explicit removal, draft clarification, unrelated changes, complete/incomplete Apply with zero model access, history inclusion, blank request validation and safe model failure.
+- [x] Preserve both skeleton checks; inject TestModel instead of allowing the new live endpoint to initialize a gateway client.
+- [x] Run the full checks; observe the expected endpoint/rule failures.
+- [x] Implement plain merge/location rules, orchestration, both typed endpoints and safe configuration/upstream errors. Preserve optional budget and existing filter fields.
+- [x] Run all checks, confirm green, and commit.
 
 ### Task 3: Browser workflow and documentation
 
@@ -78,10 +78,10 @@
 - Both actions keep incomplete candidates as `draftFilters`; complete candidates replace `appliedFilters`.
 - A disabled form/fieldset plus a busy guard prevents conflicting input while a request is in flight. All model/user text is rendered with `textContent`.
 
-- [ ] Write a failing browser behavior check using installed headless Chromium and a local TestModel app: verify Apply/Send priority, clearing unsent text, draft completion, failure preservation and busy controls. Keep temporary browser artifacts in ignored local scratch, not a new browser dependency in pytest.
-- [ ] Replace the placeholder UI behavior with the state/transcript above. Keep `search-form`, initially hidden filters, and Results/Liked placeholders.
-- [ ] Document setup and a reproducible manual walkthrough in README; add `LLM_MODEL` and the non-secret gateway URL to `.env.example`; ignore `.superpowers/`.
-- [ ] Run the browser walkthrough and Ruff/mypy/pytest. Record what the browser check establishes separately from real model quality; do not call the live gateway in tests.
+- [x] Write a failing browser behavior check using installed headless Chromium and a local TestModel app: verify Apply/Send priority, clearing unsent text, draft completion, failure preservation and busy controls. Keep temporary browser artifacts in ignored local scratch, not a new browser dependency in pytest.
+- [x] Replace the placeholder UI behavior with the state/transcript above. Keep `search-form`, initially hidden filters, and Results/Liked placeholders.
+- [x] Document setup and a reproducible manual walkthrough in README; add `LLM_MODEL` and the non-secret gateway URL to `.env.example`; ignore `.superpowers/`.
+- [x] Run the browser walkthrough and Ruff/mypy/pytest. Record what the browser check establishes separately from real model quality; do not call the live gateway in tests.
 - [ ] Commit the page and documentation, then request one independent whole-branch review. Fix important findings with failing regression checks first.
 - [ ] Push, create the implementation PR with Summary and Test plan, watch checks, and leave merging to the user.
 

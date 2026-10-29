@@ -123,3 +123,16 @@ def test_missing_gateway_settings_produce_a_safe_error(
         agent.get_model()
 
     assert "not-a-real-key" not in str(error.value)
+
+
+@pytest.mark.parametrize("gateway", ["https://[", "https://example.invalid:bad/v1"])
+def test_malformed_gateway_setting_produces_safe_configuration_error(
+    gateway: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("LLM_API_GATEWAY", gateway)
+    monkeypatch.setenv("LLM_API_TOKEN", "not-a-real-key")
+
+    with pytest.raises(agent.AgentUnavailableError) as error:
+        agent.get_model()
+
+    assert "not-a-real-key" not in str(error.value)

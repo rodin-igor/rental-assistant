@@ -16,3 +16,6 @@ wheels/
 .mypy_cache
 .pytest_cache
 .ruff_cache
+
+# Local skill previews, execution ledgers, and browser-check artifacts
+.superpowers/
