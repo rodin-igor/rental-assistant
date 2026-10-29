@@ -36,3 +36,30 @@ def test_neighborhood_alone_is_not_a_complete_location() -> None:
     assert rules.has_complete_location(
         city=None, state=None, neighborhood="Downtown"
     ) is False
+
+
+def test_merge_changes_preserves_untouched_fields_and_explicit_false() -> None:
+    current = {"city": "Honolulu", "max_monthly_rent": 2500, "dogs_allowed": True}
+
+    result = rules.merge_filter_changes(current, {"max_monthly_rent": 2200, "dogs_allowed": False})
+
+    assert result == {"city": "Honolulu", "max_monthly_rent": 2200, "dogs_allowed": False}
+    assert current == {"city": "Honolulu", "max_monthly_rent": 2500, "dogs_allowed": True}
+
+
+def test_explicit_null_removes_budget_and_clears_amenities() -> None:
+    result = rules.merge_filter_changes(
+        {"max_monthly_rent": 2500, "amenities": ["parking"]},
+        {"max_monthly_rent": None, "amenities": None},
+    )
+
+    assert result == {"max_monthly_rent": None, "amenities": []}
+
+
+@pytest.mark.parametrize(("city", "state"), [(None, None), (" ", "HI"), ("Honolulu", "")])
+def test_incomplete_location_requires_a_question(city: str | None, state: str | None) -> None:
+    assert rules.location_question(city, state)
+
+
+def test_complete_location_requires_no_question() -> None:
+    assert rules.location_question(" Honolulu ", " HI ") is None
