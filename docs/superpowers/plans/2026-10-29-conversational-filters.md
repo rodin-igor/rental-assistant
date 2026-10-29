@@ -82,9 +82,15 @@
 - [x] Replace the placeholder UI behavior with the state/transcript above. Keep `search-form`, initially hidden filters, and Results/Liked placeholders.
 - [x] Document setup and a reproducible manual walkthrough in README; add `LLM_MODEL` and the non-secret gateway URL to `.env.example`; ignore `.superpowers/`.
 - [x] Run the browser walkthrough and Ruff/mypy/pytest. Record what the browser check establishes separately from real model quality; do not call the live gateway in tests.
-- [ ] Commit the page and documentation, then request one independent whole-branch review. Fix important findings with failing regression checks first.
+- [x] Commit the page and documentation, then request one independent whole-branch review. Fix important findings with failing regression checks first.
 - [ ] Push, create the implementation PR with Summary and Test plan, watch checks, and leave merging to the user.
 
 ## Execution notes
 
 The user explicitly approved the design and requested building it. Execute in this session without another approval pause. Work on `feat/conversational-filters` in the existing checkout; preserve the user's uncommitted `AGENTS.md` edit. The approved design PR is still open, so this implementation branch includes its documentation commit and the final PR will describe the full finished change.
+
+Independent review found no blocking issues. Nonblocking follow-ups are domain
+constraints for negative rent/bedroom values and a dedicated regression sequence
+for replacing an older chat draft with an incomplete manual Apply. The six
+Chromium scenarios and two separate manual gateway requests passed; all 46
+automated tests remain offline.
