@@ -46,6 +46,10 @@ no # noqa or # type: ignore, no skipped tests.
   why, citing docs/proposal.md) and a ## Test plan
   checklist (checked items were run; unchecked items
   are left for the reviewer).
+- When preparing, creating, or updating a pull request,
+  use `.agents/skills/pr-review-diagrams/SKILL.md`.
+  Include its Diagram section before the Test plan
+  to explain the changed flow or structure.
 - After pushing, run gh pr checks --watch and report
   the result.
 -  Never merge a pull request. The person merges
