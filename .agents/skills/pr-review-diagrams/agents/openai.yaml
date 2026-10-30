@@ -1,0 +1,7 @@
+interface:
+  display_name: "PR Review Diagrams"
+  short_description: "Explain PR flows and structure with Mermaid diagrams"
+  default_prompt: "Use $pr-review-diagrams to add a concise, code-grounded Mermaid diagram to this pull request description."
+
+policy:
+  allow_implicit_invocation: true
